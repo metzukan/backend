@@ -1,0 +1,33 @@
+{
+  "swagger": {
+    "outputDirectory": "./",
+    "entryFile": "./src/index.ts",
+    "host": "localhost:8080",
+    "basePath": "/",
+    "tags": [
+      {
+        "name": "Users",
+        "description": "Users of metzukan."
+      }
+    ],
+    "name": "Metzukan backend",
+    "description": "",
+    "securityDefinitions": {
+      "USERS": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
+    "schemes": ["http"],
+    "yaml": true
+  },
+  "routes": {
+    "basePath": "/",
+    "entryFile": "./src/index.ts",
+    "routesDir": "./src/routers",
+    "middlewareTemplate": "./src/routers/express-routes-template.ts.tsoa",
+    "authenticationModule": "./src/security/authentication.ts"
+  },
+  "ignore": ["**/node_modules/**"]
+}
