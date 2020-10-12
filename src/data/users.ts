@@ -16,3 +16,8 @@ export const deleteUser = async (guid: string): Promise<void> => {
   const usersRepository = getConnection().getRepository(User);
   await usersRepository.delete(guid);
 };
+
+export const updateUser = async (guid: string, userProps: Partial<User>): Promise<void> => {
+  const usersRepository = getConnection().getRepository(User);
+  await usersRepository.update(guid, userProps);
+};

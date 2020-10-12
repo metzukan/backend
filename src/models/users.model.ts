@@ -1,3 +1,4 @@
+import { UserStatus } from '../core';
 import { Entity, Column } from 'typeorm';
 
 @Entity({ name: 'users' })
@@ -26,6 +27,12 @@ export class User {
    */
   @Column({ name: 'next_ack', type: 'int', nullable: true })
   public nextAck?: number;
+
+  /**
+   * The user known status
+   */
+  @Column({ name: 'status', type: 'enum', enum: UserStatus, nullable: false })
+  public status: UserStatus;
 
   constructor(private user?: Partial<User>) {
     if (user) {

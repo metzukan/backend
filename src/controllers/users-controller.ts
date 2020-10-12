@@ -80,8 +80,6 @@ export class usersController extends Controller {
 
     await createUser(userConstInfo);
 
-    await usersOnDemandInfo.set(userGuid, { userSignInfo } as UserOnDemandInfo);
-
     const signedInfo: SignedInfo = {
       userSignInfo,
       userGuid

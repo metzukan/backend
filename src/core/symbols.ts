@@ -1,10 +1,16 @@
-import { User } from 'src/models';
-
+import { User } from '../models';
 import 'express';
+
 declare module 'express' {
   export interface Request {
     signedInfo?: SignedInfo;
   }
+}
+
+export enum UserStatus {
+  OK = 'OK',
+  NOT_RESPONDING = 'NOT_RESPONDING',
+  EMERGENCY = 'EMERGENCY'
 }
 
 export interface ObjectKeyMap<T = string> {
@@ -28,7 +34,7 @@ export interface UserCreation {
 
 export interface UserOnDemandInfo {
   userPingInfo?: UserPingInfo;
-  userSignInfo: UserSignInfo;
+  userSignInfo?: UserSignInfo;
 }
 
 export interface UserSignInfo {
@@ -40,12 +46,12 @@ export interface UserSignInfo {
 }
 
 export interface UserPingInfo {
-  coordinates: {
+  coordinates?: {
     N: string;
     E: string;
   };
   nextAck: number;
-  status: 'OK' | 'NOT_RESPONDING' | 'EMERGENCY';
+  status: UserStatus;
 }
 
 export interface SignedInfo {

@@ -12,6 +12,7 @@ import { RegisterRoutes } from './routers/routes';
 
 // controllers need to be referenced in order to get crawled by the TSOA generator
 import './controllers/users-controller';
+import './controllers/ack-controller';
 
 class App {
   public express: express.Express;
