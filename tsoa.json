@@ -17,6 +17,11 @@
         "type": "apiKey",
         "name": "Authorization",
         "in": "header"
+      },
+      "ADMIN": {
+        "type": "apiKey",
+        "name": "api-key",
+        "in": "header"
       }
     },
     "schemes": ["http"],

@@ -52,6 +52,8 @@ enter in command line:
 
 read [swagger.yaml](./swagger.yaml) file.
 
+To explorer the full API specs use [swagger UI](https://petstore.swagger.io/) and put `https://raw.githubusercontent.com/metzukan/backend/master/swagger.yaml` in the explorer input.
+
 ### Configuration
 
 environment variables:

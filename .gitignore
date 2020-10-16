@@ -65,5 +65,4 @@ typings/
 .idea
 dist
 routes.ts
-swagger.yaml
 .vscode/settings.json

@@ -1,0 +1,227 @@
+basePath: /
+consumes:
+    - application/json
+definitions:
+    UserStatus:
+        enum:
+            - OK
+            - NOT_RESPONDING
+            - EMERGENCY
+        type: string
+    User:
+        properties:
+            guid:
+                type: string
+                description: "The id of the user.\n(set as '?' for enable off validation only)"
+                x-nullable: true
+            selfEmail:
+                type: string
+                description: 'The user mail, used to send notification in case of user not sending ack, or note before user deleting etc.'
+            nickname:
+                type: string
+                description: 'A name to send in the email etc. not the real user name, since we don''t want to hold it.'
+            nextAck:
+                type: number
+                format: double
+                description: 'The next ack from this user (if not, there is a problem)'
+                x-nullable: true
+            status:
+                $ref: '#/definitions/UserStatus'
+                description: 'The user known status'
+        required:
+            - selfEmail
+            - nickname
+            - status
+        type: object
+    CreateUserResponse:
+        properties:
+            token:
+                type: string
+        required:
+            - token
+        type: object
+    UserContact:
+        properties:
+            name:
+                type: string
+            mail:
+                type: string
+        required:
+            - name
+            - mail
+        type: object
+    UserSignInfo:
+        properties:
+            firstName:
+                type: string
+            lastName:
+                type: string
+            address:
+                type: string
+            freeText:
+                type: string
+                x-nullable: true
+            contacts:
+                type: array
+                items:
+                    $ref: '#/definitions/UserContact'
+        required:
+            - firstName
+            - lastName
+            - address
+            - contacts
+        type: object
+    UserCreation:
+        properties:
+            userConstInfo:
+                $ref: '#/definitions/User'
+            userSignInfo:
+                $ref: '#/definitions/UserSignInfo'
+        required:
+            - userConstInfo
+            - userSignInfo
+        type: object
+    UserPingInfo:
+        properties:
+            coordinates:
+                type: object
+                x-nullable: true
+            nextAck:
+                type: number
+                format: double
+            status:
+                $ref: '#/definitions/UserStatus'
+        required:
+            - nextAck
+            - status
+        type: object
+info:
+    title: 'Metzukan backend'
+    version: 1.0.0
+    description: 'Using latest JavaScript features on the server'
+    license:
+        name: MIT
+paths:
+    /users:
+        get:
+            operationId: GetAllUsers
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Ok
+                    schema:
+                        type: array
+                        items:
+                            $ref: '#/definitions/User'
+                '401':
+                    description: 'Authentication fail'
+                '501':
+                    description: 'Server error'
+            tags:
+                - Users
+            security:
+                -
+                    ADMIN: []
+            parameters: []
+        post:
+            operationId: CreateUser
+            produces:
+                - application/json
+            responses:
+                '200':
+                    description: Ok
+                    schema:
+                        $ref: '#/definitions/CreateUserResponse'
+                '501':
+                    description: 'Server error'
+            description: 'Login to system. returns JWT token.'
+            tags:
+                - Users
+            security: []
+            parameters:
+                -
+                    in: body
+                    name: userInfo
+                    required: true
+                    schema:
+                        $ref: '#/definitions/UserCreation'
+        delete:
+            operationId: DeleteUser
+            produces:
+                - application/json
+            responses:
+                '204':
+                    description: 'No content'
+                '401':
+                    description: 'Authentication fail'
+                '501':
+                    description: 'Server error'
+            tags:
+                - Users
+            security:
+                -
+                    USER: []
+            parameters: []
+    '/users/{userGuid}':
+        delete:
+            operationId: DeleteUserById
+            produces:
+                - application/json
+            responses:
+                '204':
+                    description: 'No content'
+                '401':
+                    description: 'Authentication fail'
+                '501':
+                    description: 'Server error'
+            tags:
+                - Users
+            security:
+                -
+                    ADMIN: []
+            parameters:
+                -
+                    in: path
+                    name: userGuid
+                    required: true
+                    type: string
+    /ack:
+        post:
+            operationId: Ack
+            produces:
+                - application/json
+            responses:
+                '204':
+                    description: 'No content'
+                '401':
+                    description: 'Authentication fail'
+                '501':
+                    description: 'Server error'
+            tags:
+                - Ack
+            security:
+                -
+                    USER: []
+            parameters:
+                -
+                    in: body
+                    name: userPingInfo
+                    required: true
+                    schema:
+                        $ref: '#/definitions/UserPingInfo'
+produces:
+    - application/json
+swagger: '2.0'
+securityDefinitions:
+    USERS:
+        type: apiKey
+        name: Authorization
+        in: header
+host: 'localhost:8080'
+tags:
+    -
+        name: Users
+        description: 'Users of metzukan.'
+schemes:
+    - http
