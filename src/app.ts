@@ -70,7 +70,7 @@ class App {
     this.express.use(helmet());
     this.express.use(helmet.frameguard({ action: 'deny' }));
 
-    // Allow access from browser extension, otherwise the request fails CORS
+    // Allow access from browser, otherwise the request fails CORS
     this.express.use(cors());
   }
 
