@@ -7,6 +7,11 @@ export const getUsers = async (): Promise<User[]> => {
   return await usersRepository.find();
 };
 
+export const getUserById = async (guid: string): Promise<User> => {
+  const usersRepository = getConnection().getRepository(User);
+  return await usersRepository.findOneOrFail(guid);
+};
+
 export const createUser = async (user: User): Promise<void> => {
   const usersRepository = getConnection().getRepository(User);
   await usersRepository.insert(new User(user));

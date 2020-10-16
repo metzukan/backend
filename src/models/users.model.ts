@@ -1,5 +1,5 @@
 import { UserStatus } from '../core';
-import { Entity, Column } from 'typeorm';
+import { Entity, Column, AfterLoad } from 'typeorm';
 
 @Entity({ name: 'users' })
 export class User {
@@ -25,7 +25,7 @@ export class User {
   /**
    * The next ack from this user (if not, there is a problem)
    */
-  @Column({ name: 'next_ack', type: 'int', nullable: true })
+  @Column({ name: 'next_ack', type: 'bigint', nullable: true })
   public nextAck?: number;
 
   /**
@@ -37,6 +37,13 @@ export class User {
   constructor(private user?: Partial<User>) {
     if (user) {
       Object.assign(this, user);
+    }
+  }
+
+  @AfterLoad()
+  updateCounters() {
+    if (typeof this.nextAck === 'string') {
+      this.nextAck = parseInt(this.nextAck);
     }
   }
 }

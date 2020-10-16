@@ -41,7 +41,7 @@ export interface UserSignInfo {
   firstName: string;
   lastName: string;
   address: string;
-  freeText: string;
+  freeText?: string;
   contacts: UserContact[];
 }
 

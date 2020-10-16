@@ -61,3 +61,6 @@ environment variables:
 - `REQUESTS_LIMIT` Maximum requests in 10 minutes window per IP. (default 1000).
 - `JWT_SECRET` JWT private stamp key.
 - `API_KEY` The API key to allows admins to access data.
+- `MAIL_USER_NAME` The email account to sent the alerts from  (for example ''my-usename@gmail.com'')
+- `MAIL_USER_KEY` The email account password (If you're using the 2-factor authentication protection, generate an application key)
+- `MAIL_SMTP_SERVER` The email server (for example 'smtp.gmail.com')

@@ -48,7 +48,7 @@ export class FirstVersion1602366931964 implements MigrationInterface {
           },
           {
             name: 'next_ack',
-            type: 'int',
+            type: 'bigint',
             isNullable: true
           },
           {

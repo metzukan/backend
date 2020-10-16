@@ -11,8 +11,17 @@ import {
   Get
 } from 'tsoa';
 import * as express from 'express';
-import { UserOnDemandInfo, UserPingInfo, usersOnDemandInfo, UserStatus } from '../core';
-import { updateUser } from '../data';
+import {
+  sendEmergencyMail,
+  sendMail,
+  sendNotRespondingMail,
+  UserOnDemandInfo,
+  UserPingInfo,
+  usersOnDemandInfo,
+  UserStatus
+} from '../core';
+import { getUserById, updateUser } from '../data';
+import { handleEmergency, handleNotResponding } from '../logic';
 
 @Tags('Ack')
 @Route('/ack')
@@ -29,8 +38,6 @@ export class ackController extends Controller {
 
     const { nextAck, status } = userPingInfo;
 
-    await updateUser(userGuid, { nextAck, status });
-
     const currUserInfo: UserOnDemandInfo = {};
     currUserInfo.userPingInfo = userPingInfo;
     // If the status is not OK keep the user contacts info in the on-demand cache
@@ -41,11 +48,15 @@ export class ackController extends Controller {
     await usersOnDemandInfo.set(userGuid, currUserInfo);
 
     if (userPingInfo.status === UserStatus.NOT_RESPONDING) {
-      // run the not responding action
+      // run the not responding action in the background
+      handleNotResponding(userGuid);
     }
 
     if (userPingInfo.status === UserStatus.EMERGENCY) {
-      // run the emergency action ASAP in the background
+      // run the emergency action in the background
+      handleEmergency(userGuid, userPingInfo, userSignInfo);
     }
+
+    await updateUser(userGuid, { nextAck, status });
   }
 }

@@ -3,3 +3,4 @@ export * from './cache';
 export * from './logger';
 export * from './config';
 export * from './migrations';
+export * from './mail';
