@@ -1,6 +1,6 @@
 # Metzukan backend
 
-Based on https://github.com/vmasto/express-babel: Express.js with Babel Boilerplate.
+[![CI CD Status](https://github.com/metzukan/backend/workflows/metzukan%20backend%20CI%20CD/badge.svg?branch=master)](https://github.com/metzukan/backend/actions)
 
 Using TSOA Routing https://github.com/lukeautry/tsoa.
 
