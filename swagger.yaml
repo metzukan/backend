@@ -214,14 +214,18 @@ produces:
     - application/json
 swagger: '2.0'
 securityDefinitions:
-    USERS:
+    USER:
         type: apiKey
         name: Authorization
         in: header
-host: 'localhost:8080'
+    ADMIN:
+        type: apiKey
+        name: api-key
+        in: header
+host: 'https://metzukan.herokuapp.com'
 tags:
     -
         name: Users
         description: 'Users of metzukan.'
 schemes:
-    - http
+    - https

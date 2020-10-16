@@ -2,7 +2,7 @@
   "swagger": {
     "outputDirectory": "./",
     "entryFile": "./src/index.ts",
-    "host": "localhost:8080",
+    "host": "https://metzukan.herokuapp.com",
     "basePath": "/",
     "tags": [
       {
@@ -13,7 +13,7 @@
     "name": "Metzukan backend",
     "description": "",
     "securityDefinitions": {
-      "USERS": {
+      "USER": {
         "type": "apiKey",
         "name": "Authorization",
         "in": "header"
@@ -24,7 +24,7 @@
         "in": "header"
       }
     },
-    "schemes": ["http"],
+    "schemes": ["https"],
     "yaml": true
   },
   "routes": {
