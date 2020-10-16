@@ -222,7 +222,7 @@ securityDefinitions:
         type: apiKey
         name: api-key
         in: header
-host: 'https://metzukan.herokuapp.com'
+host: metzukan.herokuapp.com
 tags:
     -
         name: Users
