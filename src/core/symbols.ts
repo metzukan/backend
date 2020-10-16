@@ -32,7 +32,7 @@ export interface UserCreation {
   userSignInfo: UserSignInfo;
 }
 
-export interface UserOnDemandInfo {
+export interface UserOnDemandStoredInfo {
   userPingInfo?: UserPingInfo;
   userSignInfo?: UserSignInfo;
 }

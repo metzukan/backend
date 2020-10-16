@@ -15,7 +15,7 @@ import {
   sendEmergencyMail,
   sendMail,
   sendNotRespondingMail,
-  UserOnDemandInfo,
+  UserOnDemandStoredInfo,
   UserPingInfo,
   usersOnDemandInfo,
   UserStatus
@@ -29,6 +29,7 @@ export class ackController extends Controller {
   @Security('USER')
   @Response(501, 'Server error')
   @Response(401, 'Authentication fail')
+  @Response(422, 'Un-processable entity')
   @Post()
   public async ack(
     @Request() request: express.Request,
@@ -38,7 +39,7 @@ export class ackController extends Controller {
 
     const { nextAck, status } = userPingInfo;
 
-    const currUserInfo: UserOnDemandInfo = {};
+    const currUserInfo: UserOnDemandStoredInfo = {};
     currUserInfo.userPingInfo = userPingInfo;
     // If the status is not OK keep the user contacts info in the on-demand cache
     // but if it's OK, override the info if exists

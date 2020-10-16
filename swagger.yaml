@@ -133,6 +133,8 @@ paths:
                     description: Ok
                     schema:
                         $ref: '#/definitions/CreateUserResponse'
+                '422':
+                    description: 'Un-processable entity'
                 '501':
                     description: 'Server error'
             description: 'Login to system. returns JWT token.'
@@ -196,6 +198,8 @@ paths:
                     description: 'No content'
                 '401':
                     description: 'Authentication fail'
+                '422':
+                    description: 'Un-processable entity'
                 '501':
                     description: 'Server error'
             tags:

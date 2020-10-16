@@ -18,10 +18,12 @@ import {
   SignedInfo,
   TOKEN_HEADER_PREFIX,
   UserCreation,
-  UserOnDemandInfo,
-  usersOnDemandInfo
+  UserOnDemandStoredInfo,
+  usersOnDemandInfo,
+  UserStatus
 } from '../core';
 import { User } from '../models';
+import { userCreationSchema } from '../security/schema-validator';
 
 export interface CreateUserResponse {
   token: string;
@@ -69,14 +71,22 @@ export class usersController extends Controller {
    * @returns JWT token
    */
   @Response(501, 'Server error')
+  @Response(422, 'Un-processable entity')
   @Post()
   public async createUser(@Body() userInfo: UserCreation): Promise<CreateUserResponse> {
-    // joi validation\
+    try {
+      // Add joi validation (even that TSOA validates too, to make sure the mails are correct etc.)
+      await userCreationSchema.validateAsync(userInfo);
+    } catch (err) {
+      this.setStatus(422);
+      return err.message;
+    }
 
     const { userConstInfo, userSignInfo } = userInfo;
 
     const userGuid = uuidv4();
     userConstInfo.guid = userGuid;
+    userConstInfo.status = UserStatus.OK;
 
     await createUser(userConstInfo);
 
