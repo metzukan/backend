@@ -61,6 +61,7 @@ environment variables:
 - `DATABASE_URL` DB URI.
 - `PORT` HTTP Port. (default 8080).
 - `REQUESTS_LIMIT` Maximum requests in 10 minutes window per IP. (default 1000).
+- `OPEN_API_REQUESTS_MINUTE_LIMIT` Maximum requests in 1 minute pre IP, for the open API (non admin) access (default 2)  
 - `JWT_SECRET` JWT private stamp key.
 - `API_KEY` The API key to allows admins to access data.
 - `MAIL_USER_NAME` The email account to sent the alerts from  (for example ''my-usename@gmail.com'')

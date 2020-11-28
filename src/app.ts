@@ -1,18 +1,19 @@
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
 import * as cors from 'cors';
-import * as RateLimit from 'express-rate-limit';
+import * as rateLimit from 'express-rate-limit';
 import * as helmet from 'helmet';
 import { sanitizeExpressMiddleware, sanitizeJsonSync } from 'generic-json-sanitizer';
 import { createConnection } from 'typeorm';
 
-import { logger } from './core';
+import { logger, Scope } from './core';
 
 import { RegisterRoutes } from './routers/routes';
 
 // controllers need to be referenced in order to get crawled by the TSOA generator
 import './controllers/users-controller';
 import './controllers/ack-controller';
+import { expressAuthentication, expressAuthenticationSync } from './security/authentication';
 
 class App {
   public express: express.Express;
@@ -57,14 +58,30 @@ class App {
    * Protect from many vulnerabilities ,by http headers such as HSTS HTTPS redirect etc.
    */
   private _vulnerabilityProtection(): void {
-    // Protect from DDOS and access thieves
-    const limiter = new RateLimit({
+    // Protect from DDOS
+    const limiter = rateLimit({
       windowMs: 10 * 60 * 1000,
-      max: process.env.REQUESTS_LIMIT || 1000
+      max: +process.env.REQUESTS_LIMIT || 1000
+    });
+
+    // Add aggressive limiter to the open API
+    const openAPILimiter = rateLimit({
+      windowMs: 60 * 1000,
+      max: +process.env.OPEN_API_REQUESTS_MINUTE_LIMIT || 2,
+      skip: (req: express.Request, res: express.Response): boolean => {
+        try {
+          // skip this limiter in case of admin
+          expressAuthenticationSync(req, [Scope.ADMIN]);
+          return true;
+        } catch (error) {
+          return false;
+        }
+      }
     });
 
     //  apply to all  IP requests
     this.express.use(limiter);
+    this.express.use(openAPILimiter);
 
     // Protect from XSS and other malicious attacks
     this.express.use(helmet());

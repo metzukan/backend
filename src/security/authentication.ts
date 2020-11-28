@@ -10,6 +10,10 @@ import { API_KEY_HEADER, TOKEN_HEADER, TOKEN_HEADER_PREFIX } from '../core/confi
  * the key should be the 'reporterKey' property in the body.
  */
 export const expressAuthentication = async (request: express.Request, scopes: Scope[]) => {
+  return expressAuthenticationSync(request, scopes);
+};
+
+export const expressAuthenticationSync = (request: express.Request, scopes: Scope[]) => {
   /** If the routing security sent wrong security scope. */
   if (!scopes || scopes.length < 1) {
     logger.error('invalid or empty security scope');
